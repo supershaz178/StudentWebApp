@@ -39,6 +39,9 @@ public class Student implements Serializable {
 	@Column(name="FRIST_NM")
 	private String firstName; 
 	
+	@Column(name="MIDDLE_NM")
+	private String middleName; 
+	
 	@Column(name="LAST_NM")
 	private String lastName;
 	
@@ -89,6 +92,12 @@ public class Student implements Serializable {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public String getMiddleName() {
+		return middleName;
+	}
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	} 
 
 }
