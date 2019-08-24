@@ -30,7 +30,6 @@ public class Student implements Serializable {
 	private Integer externalStudentId;
 	
 	@Column(name="ENTRY_DT")
-	@Temporal(value = TemporalType.DATE)
 	private Date entryDate; 
 	
 	@Column(name="GRADE_LVL")

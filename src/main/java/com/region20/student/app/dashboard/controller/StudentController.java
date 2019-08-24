@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.region20.student.app.dashboard.persistence.Student;
 import com.region20.student.app.dashboard.repository.StudentRepository;
 import com.region20.student.app.dashboard.service.StudentService;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/")
 public class StudentController {
 	
 	@Autowired
@@ -29,30 +32,31 @@ public class StudentController {
 	@Autowired
 	private StudentService service; 
 	
-	@RequestMapping(method=RequestMethod.POST, value="/add_student")
-	public ResponseEntity<Student> addProduct(@RequestBody Map<String,String> newStudentJson){
+	@RequestMapping(method=RequestMethod.POST, value="/add_student", produces="application/json; charset=UTF-8")
+	public ResponseEntity<Student> addStudent(@RequestBody Map<String,String> newStudentJson){
 		Student newStudent = buildStudentFromMap(newStudentJson); 
 		
 		if(repo.existsById(newStudent.getId())){
 			return new ResponseEntity<Student>(HttpStatus.BAD_REQUEST); 
 		}
 		repo.save(newStudent);
-		return new ResponseEntity<Student>(HttpStatus.CREATED); 
+		return ResponseEntity.ok(newStudent); 
 
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/search")
+	@RequestMapping(method=RequestMethod.GET, value="/search", produces="application/json; charset=UTF-8")
 	public ResponseEntity<List<Student>> searchForStudents(@RequestBody HashMap<String,List<Object>> parameters){
-		ResponseEntity<List<Student>> response = null; 
-		
 		List<Student> matchedStudents = service.searchStudents(parameters); 
-		response = new ResponseEntity<List<Student>>(matchedStudents, HttpStatus.OK); 
 		
-		return response; 
+		if(matchedStudents.isEmpty() || matchedStudents == null){
+			return new ResponseEntity<List<Student>>(HttpStatus.NO_CONTENT); 
+		} 
+		
+		return ResponseEntity.ok(matchedStudents); 
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/{student_id}")
-	public ResponseEntity<Student> updateProduct(@RequestBody Map<String,String> studentMap, @PathVariable(value="product_id")Integer id){
+	@RequestMapping(method=RequestMethod.PUT, value="/{student_id}", produces="application/json; charset=UTF-8")
+	public ResponseEntity<Student> updateStudent(@RequestBody Map<String,String> studentMap, @PathVariable(value="product_id")Integer id){
 		
 		Student newStudent;
 		if(!repo.existsById(id)){
@@ -69,14 +73,30 @@ public class StudentController {
 			repo.save(newStudent); 
 		}
 		
-		return new ResponseEntity<Student>(newStudent,HttpStatus.OK);
+		return ResponseEntity.ok(newStudent); 
 	}
 
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<Student>> getAllProducts(){
-		List<Student> allStudents = (List<Student>) repo.findAll(); 
+	@RequestMapping(method=RequestMethod.GET,value="/", produces="application/json; charset=UTF-8")
+	public ModelAndView getAllStudents(){
+		List<Student> allStudents = (List<Student>) repo.findAll();
+		ModelAndView mv = new ModelAndView(); 
+		ObjectMapper mapper = new ObjectMapper();
 		
-		return new ResponseEntity<List<Student>>(allStudents, HttpStatus.OK);
+		try {
+			String json = mapper.writeValueAsString(allStudents);
+			
+			if(allStudents.isEmpty() || allStudents == null){
+				mv = new ModelAndView("index", HttpStatus.NO_CONTENT); 
+			}else{
+				mv.addObject("allStudents", json); 
+			}
+
+		} catch (JsonProcessingException e) {
+			mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		} 
+				
+		return mv;  
 	}
 
 	

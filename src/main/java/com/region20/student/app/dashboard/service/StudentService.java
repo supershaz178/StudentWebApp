@@ -55,9 +55,9 @@ public class StudentService {
 				String name = (String)objName; 
 				String[] nameArray = name.split(" "); 
 				if(nameArray.length > 2){
-					matchedStudents.addAll(repo.findByFullName(nameArray[0], nameArray[1], nameArray[2])); 
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], nameArray[1], nameArray[2])); 
 				}else{
-					matchedStudents.addAll(repo.findByFullName(nameArray[0], null, nameArray[2]));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], null, nameArray[2]));
 				}
 			}
 		}
@@ -74,7 +74,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) year); 
 			}
 		}
-		matchedStudents = repo.findBySchoolYears(convertedIntegers); 
+		matchedStudents = repo.findBySchoolYear(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -102,7 +102,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) id); 
 			}
 		}
-		matchedStudents = repo.findByExtStudentId(convertedIntegers); 
+		matchedStudents = repo.findByExternalStudentId(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -116,7 +116,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) entryDate); 
 			}
 		}
-		matchedStudents = repo.findBySchoolYears(convertedIntegers); 
+		matchedStudents = repo.findBySchoolYear(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -130,7 +130,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) level); 
 			}
 		}
-		matchedStudents = repo.findBySchoolYears(convertedIntegers); 
+		matchedStudents = repo.findBySchoolYear(convertedIntegers); 
 		
 		return matchedStudents; 
 	}

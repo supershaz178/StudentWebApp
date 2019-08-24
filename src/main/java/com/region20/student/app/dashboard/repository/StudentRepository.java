@@ -11,13 +11,13 @@ import com.region20.student.app.dashboard.persistence.Student;
 @Repository
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 		
-	public List<Student> findBySchoolYears(List<Integer> years); 
+	public List<Student> findBySchoolYear(List<Integer> years); 
 	
 	public List<Student> findByCampus(List<Integer> campuses); 
 	
-	public List<Student> findByExtStudentId(List<Integer> studentIds); 
+	public List<Student> findByExternalStudentId(List<Integer> studentIds); 
 	
-	public List<Student> findEntryDate(List<Date> entryDates); 
+	public List<Student> findByEntryDate(List<Date> entryDates); 
 	
 	public List<Student> findByGradeLevel(List<Integer> gradeLevels); 
 	
@@ -25,7 +25,7 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
 	
 	public List<Student> findByLastName(List<String> lastName); 
 	
-	public List<Student> findByFullName(String firstName, String lastName, String middleName); 
+	public List<Student> findByFirstNameAndMiddleNameAndLastName(String firstName, String lastName, String middleName); 
 
-	public List<Student> findByFullNames(List<String> fullNames); 
+	//public List<Student> findByFullNames(List<String> fullNames); 
 }
