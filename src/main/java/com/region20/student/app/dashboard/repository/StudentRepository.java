@@ -14,21 +14,21 @@ import com.region20.student.app.dashboard.persistence.Student;
 @Transactional
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 		
-	public List<Student> findBySchoolYear(List<Integer> years); 
+	public List<Student> findBySchoolYearIn(List<Integer> years); 
 	
-	public List<Student> findByCampus(List<Integer> campuses); 
+	public List<Student> findByCampusIn(List<Integer> campuses); 
 	
-	public List<Student> findByExternalStudentId(List<Integer> studentIds);
+	public List<Student> findByExternalStudentIdIn(List<Integer> studentIds);
 	
 	public Student findByExternalStudentId(Integer studentId);
 	
-	public List<Student> findByEntryDate(List<Date> entryDates); 
+	public List<Student> findByEntryDateIn(List<Date> entryDates); 
 	
-	public List<Student> findByGradeLevel(List<Integer> gradeLevels); 
+	public List<Student> findByGradeLevelIn(List<Integer> gradeLevels); 
 	
-	public List<Student> findByFirstName(List<String> firstName); 
+	public List<Student> findByFirstNameIn(List<String> firstName); 
 	
-	public List<Student> findByLastName(List<String> lastName); 
+	public List<Student> findByLastNameIn(List<String> lastName); 
 	
 	public List<Student> findByFirstNameAndMiddleNameAndLastName(String firstName, String lastName, String middleName); 
 

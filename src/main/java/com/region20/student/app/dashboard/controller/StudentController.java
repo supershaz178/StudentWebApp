@@ -45,7 +45,7 @@ public class StudentController {
 
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/search", produces="application/json; charset=UTF-8")
+	@RequestMapping(method=RequestMethod.GET, value="/searchStudents", produces="application/json; charset=UTF-8")
 	public ResponseEntity<List<Student>> searchForStudents(@RequestBody HashMap<String,List<Object>> parameters){
 		List<Student> matchedStudents = service.searchStudents(parameters); 
 		

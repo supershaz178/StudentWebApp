@@ -16,18 +16,18 @@ public class StudentService {
 	@Autowired
 	private StudentRepository repo; 
 	
-	private static final String NAME_KEY = "NAME"; 
-	private static final String SCH_YR_KEY = "SCHOOL_YR"; 
-	private static final String CAMPUS_KEY = "CAMPUS"; 
-	private static final String EXT_STUDENT_ID_KEY = "EXT_ID"; 
-	private static final String ENTRY_DT_KEY = "ENTRY_DT"; 
-	private static final String GRADE_LVL_KEY = "GRADE"; 
+	private static final String NAME_KEY = "name"; 
+	private static final String SCH_YR_KEY = "schoolYear"; 
+	private static final String CAMPUS_KEY = "campus"; 
+	private static final String EXT_STUDENT_ID_KEY = "externalStudentId"; 
+	private static final String ENTRY_DT_KEY = "entryDate"; 
+	private static final String GRADE_LVL_KEY = "gradeLevel"; 
 	
 	public List<Student> searchStudents(HashMap<String,List<Object>> parameters){
 		List<Student> matchedStudents = new ArrayList<Student>();
 		
 		for(String x : parameters.keySet()){
-			if(NAME_KEY.equals(x)){
+			if(NAME_KEY.contains(x)){
 				List<Student> studentNames = searchStudentsByNames(parameters.get(x));  
 				matchedStudents.addAll(studentNames); 
 			}else if(SCH_YR_KEY.equals(x)){
@@ -74,7 +74,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) year); 
 			}
 		}
-		matchedStudents = repo.findBySchoolYear(convertedIntegers); 
+		matchedStudents = repo.findBySchoolYearIn(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -88,7 +88,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) code); 
 			}
 		}
-		matchedStudents = repo.findByCampus(convertedIntegers); 
+		matchedStudents = repo.findByCampusIn(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -98,11 +98,11 @@ public class StudentService {
 		List<Integer> convertedIntegers = new ArrayList<Integer>(); 
 		
 		for(Object id : studentIds){
-			if(id instanceof Integer){
-				convertedIntegers.add((Integer) id); 
+			if(id instanceof String){
+				convertedIntegers.add(new Integer((String) id)); 
 			}
 		}
-		matchedStudents = repo.findByExternalStudentId(convertedIntegers); 
+		matchedStudents = repo.findByExternalStudentIdIn(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -116,7 +116,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) entryDate); 
 			}
 		}
-		matchedStudents = repo.findBySchoolYear(convertedIntegers); 
+		matchedStudents = repo.findBySchoolYearIn(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
@@ -130,7 +130,7 @@ public class StudentService {
 				convertedIntegers.add((Integer) level); 
 			}
 		}
-		matchedStudents = repo.findBySchoolYear(convertedIntegers); 
+		matchedStudents = repo.findBySchoolYearIn(convertedIntegers); 
 		
 		return matchedStudents; 
 	}
