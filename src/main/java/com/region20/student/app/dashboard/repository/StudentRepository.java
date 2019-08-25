@@ -30,6 +30,8 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
 	
 	public List<Student> findByLastNameIn(List<String> lastName); 
 	
+	public List<Student> findByMiddleNameIn(List<String> middleName);
+	
 	public List<Student> findByFirstNameAndMiddleNameAndLastName(String firstName, String lastName, String middleName); 
 
 	//public List<Student> findByFullNames(List<String> fullNames); 

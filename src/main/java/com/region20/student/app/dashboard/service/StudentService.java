@@ -29,8 +29,14 @@ public class StudentService {
 		List<Student> matchedStudents = new ArrayList<Student>();
 		
 		for(String x : parameters.keySet()){
-			if((FIRST_NAME_KEY.equals(x)) || (MIDDLE_NAME_KEY.equals(x)) || (LAST_NAME_KEY.equals(x))){
-				List<Student> studentNames = searchStudentsByNames(parameters.get(x));  
+			if((FIRST_NAME_KEY.equals(x)) || (LAST_NAME_KEY.equals(x))){
+				List<Student> studentNames = searchStudentsByNames(parameters.get(x), FIRST_NAME_KEY);  
+				matchedStudents.addAll(studentNames); 
+			}else if(MIDDLE_NAME_KEY.equals(x)){
+				List<Student> studentNames = searchStudentsByNames(parameters.get(x), MIDDLE_NAME_KEY);  
+				matchedStudents.addAll(studentNames); 
+			}else if(LAST_NAME_KEY.equals(x)){
+				List<Student> studentNames = searchStudentsByNames(parameters.get(x), LAST_NAME_KEY);  
 				matchedStudents.addAll(studentNames); 
 			}else if(SCH_YR_KEY.equals(x)){
 				List<Object> studentSchYr = parameters.get(x); 
@@ -49,28 +55,22 @@ public class StudentService {
 		return matchedStudents; 
 	}
 	
-	private List<Student> searchStudentsByNames(List<Object> studentsNames){
+	private List<Student> searchStudentsByNames(List<Object> studentsNames, String key){
 		List<Student> matchedStudents = new ArrayList<Student>(); 
+		List<String> namesFromJson = new ArrayList<String>(); 
 		
-		for(Object objName : studentsNames){
-			if(objName instanceof String){
-				String name = (String)objName; 
-				String[] nameArray = name.split(" "); 
-				if(nameArray.length == 3){
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], nameArray[1], nameArray[2])); 
-				}else if(nameArray.length == 2){
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], null, nameArray[1]));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], nameArray[1], null));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, nameArray[0], nameArray[1]));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[1], null, nameArray[0]));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[1], nameArray[0], null));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, nameArray[1], nameArray[0]));					
-				}else{
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], null, null));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, nameArray[0], null));
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, null, nameArray[0]));
-				}
+		for(Object obj : studentsNames){
+			if(obj instanceof String){
+				namesFromJson.add((String) obj); 
 			}
+		}
+		
+		if(FIRST_NAME_KEY.equals(key)){
+			matchedStudents.addAll(repo.findByFirstNameIn(namesFromJson)); 
+		}else if(LAST_NAME_KEY.equals(key)){
+			matchedStudents.addAll(repo.findByLastNameIn(namesFromJson)); 
+		}else if(MIDDLE_NAME_KEY.equals(key)){
+			matchedStudents.addAll(repo.findByMiddleNameIn(namesFromJson)); 
 		}
 		
 		return matchedStudents; 
