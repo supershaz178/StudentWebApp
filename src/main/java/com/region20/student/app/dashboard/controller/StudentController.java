@@ -2,6 +2,7 @@ package com.region20.student.app.dashboard.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,27 +77,23 @@ public class StudentController {
 		return ResponseEntity.ok(newStudent); 
 	}
 
-	@RequestMapping(method=RequestMethod.GET,value="/", produces="application/json; charset=UTF-8")
-	public ModelAndView getAllStudents(){
-		List<Student> allStudents = (List<Student>) repo.findAll();
-		ModelAndView mv = new ModelAndView(); 
-		ObjectMapper mapper = new ObjectMapper();
+	@RequestMapping(method=RequestMethod.GET, value="/", produces="application/json; charset=UTF-8")
+	public ResponseEntity<List<Student>> getAllStudents(){
+		Iterable<Student> studentsIter = repo.findAll();
+		List<Student> allStudents = new ArrayList<Student>();
+		ResponseEntity<List<Student>> entity; 
 		
-		try {
-			String json = mapper.writeValueAsString(allStudents);
-			
-			if(allStudents.isEmpty() || allStudents == null){
-				mv = new ModelAndView("index", HttpStatus.NO_CONTENT); 
-			}else{
-				mv.addObject("allStudents", json); 
-			}
-
-		} catch (JsonProcessingException e) {
-			mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-			e.printStackTrace();
-		} 
+		for(Student s : studentsIter){
+			allStudents.add(s); 
+		}
+		
+		if(allStudents.isEmpty() || allStudents == null){
+			entity = new ResponseEntity<List<Student>>(HttpStatus.NO_CONTENT); 
+		}else{
+			entity = new ResponseEntity<List<Student>>(allStudents, HttpStatus.OK); 
+		}
 				
-		return mv;  
+		return entity;  
 	}
 
 	

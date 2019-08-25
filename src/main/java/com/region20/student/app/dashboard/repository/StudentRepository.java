@@ -3,12 +3,15 @@ package com.region20.student.app.dashboard.repository;
 import java.sql.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.region20.student.app.dashboard.persistence.Student;
 
 @Repository
+@Transactional
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 		
 	public List<Student> findBySchoolYear(List<Integer> years); 

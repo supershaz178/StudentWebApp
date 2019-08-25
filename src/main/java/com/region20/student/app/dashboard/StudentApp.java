@@ -35,7 +35,7 @@ public class StudentApp extends SpringBootServletInitializer{
 	public DriverManagerDataSource dataSource(){
 		DriverManagerDataSource source = new DriverManagerDataSource(); 
 		source.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		source.setUrl("jdbc:mysql://localhost:3306/StudentWebApp");
+		source.setUrl("jdbc:mysql://localhost:3306/studentwebapp");
 		source.setPassword("root");
 		source.setUsername("root");
 		

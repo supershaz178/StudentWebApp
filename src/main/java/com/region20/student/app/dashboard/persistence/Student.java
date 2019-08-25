@@ -5,10 +5,10 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity 
 @Table(name="STUDENT")
@@ -17,6 +17,7 @@ public class Student implements Serializable {
 	private static final long serialVersionUID = 7046650665254434581L;
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="STUDENT_SEQ")
 	@Column(name="ID")
 	private Integer id; 
 	
@@ -35,7 +36,7 @@ public class Student implements Serializable {
 	@Column(name="GRADE_LVL")
 	private Integer gradeLevel; 
 	
-	@Column(name="FRIST_NM")
+	@Column(name="FIRST_NM")
 	private String firstName; 
 	
 	@Column(name="MIDDLE_NM")
