@@ -16,7 +16,9 @@ public class StudentService {
 	@Autowired
 	private StudentRepository repo; 
 	
-	private static final String NAME_KEY = "name"; 
+	private static final String FIRST_NAME_KEY = "firstName";
+	private static final String MIDDLE_NAME_KEY = "middleName";
+	private static final String LAST_NAME_KEY = "lastName";
 	private static final String SCH_YR_KEY = "schoolYear"; 
 	private static final String CAMPUS_KEY = "campus"; 
 	private static final String EXT_STUDENT_ID_KEY = "externalStudentId"; 
@@ -27,7 +29,7 @@ public class StudentService {
 		List<Student> matchedStudents = new ArrayList<Student>();
 		
 		for(String x : parameters.keySet()){
-			if(NAME_KEY.contains(x)){
+			if((FIRST_NAME_KEY.equals(x)) || (MIDDLE_NAME_KEY.equals(x)) || (LAST_NAME_KEY.equals(x))){
 				List<Student> studentNames = searchStudentsByNames(parameters.get(x));  
 				matchedStudents.addAll(studentNames); 
 			}else if(SCH_YR_KEY.equals(x)){
@@ -54,10 +56,19 @@ public class StudentService {
 			if(objName instanceof String){
 				String name = (String)objName; 
 				String[] nameArray = name.split(" "); 
-				if(nameArray.length > 2){
+				if(nameArray.length == 3){
 					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], nameArray[1], nameArray[2])); 
+				}else if(nameArray.length == 2){
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], null, nameArray[1]));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], nameArray[1], null));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, nameArray[0], nameArray[1]));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[1], null, nameArray[0]));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[1], nameArray[0], null));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, nameArray[1], nameArray[0]));					
 				}else{
-					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], null, nameArray[2]));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(nameArray[0], null, null));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, nameArray[0], null));
+					matchedStudents.addAll(repo.findByFirstNameAndMiddleNameAndLastName(null, null, nameArray[0]));
 				}
 			}
 		}
