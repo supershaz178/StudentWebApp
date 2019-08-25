@@ -1,6 +1,7 @@
-$(document).ready(fuction(){
-	var allStudentsList = 
-	$.each(JSON.parse(allStudentsList), function(index, obj)){
-		alert(index + ":" + obj.externalStudentId); 
-	}
-}); 
+function createStudentTable(){
+	var studentList = $.ajax({
+		url: "http://localhost:8080/displayStudents"
+	});
+	
+	
+}

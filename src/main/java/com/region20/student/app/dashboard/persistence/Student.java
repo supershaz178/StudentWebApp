@@ -17,7 +17,7 @@ public class Student implements Serializable {
 	private static final long serialVersionUID = 7046650665254434581L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="STUDENT_SEQ")
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ID")
 	private Integer id; 
 	

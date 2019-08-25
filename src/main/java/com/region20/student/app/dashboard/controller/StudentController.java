@@ -33,11 +33,11 @@ public class StudentController {
 	@Autowired
 	private StudentService service; 
 	
-	@RequestMapping(method=RequestMethod.POST, value="/add_student", produces="application/json; charset=UTF-8")
+	@RequestMapping(method=RequestMethod.POST, value="/addStudent", produces="application/json; charset=UTF-8")
 	public ResponseEntity<Student> addStudent(@RequestBody Map<String,String> newStudentJson){
 		Student newStudent = buildStudentFromMap(newStudentJson); 
 		
-		if(repo.existsById(newStudent.getId())){
+		if(repo.findByExternalStudentId(newStudent.getExternalStudentId()) != null){
 			return new ResponseEntity<Student>(HttpStatus.BAD_REQUEST); 
 		}
 		repo.save(newStudent);
@@ -56,8 +56,8 @@ public class StudentController {
 		return ResponseEntity.ok(matchedStudents); 
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/{student_id}", produces="application/json; charset=UTF-8")
-	public ResponseEntity<Student> updateStudent(@RequestBody Map<String,String> studentMap, @PathVariable(value="product_id")Integer id){
+	@RequestMapping(method=RequestMethod.PUT, value="updateStudent/{student_id}", produces="application/json; charset=UTF-8")
+	public ResponseEntity<Student> updateStudent(@RequestBody Map<String,String> studentMap, @PathVariable(value="student_id")Integer id){
 		
 		Student newStudent;
 		if(!repo.existsById(id)){
@@ -77,7 +77,7 @@ public class StudentController {
 		return ResponseEntity.ok(newStudent); 
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="/", produces="application/json; charset=UTF-8")
+	@RequestMapping(method=RequestMethod.GET, value="/displayStudents", produces="application/json; charset=UTF-8")
 	public ResponseEntity<List<Student>> getAllStudents(){
 		Iterable<Student> studentsIter = repo.findAll();
 		List<Student> allStudents = new ArrayList<Student>();
@@ -102,7 +102,6 @@ public class StudentController {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy"); 
 		
-		newStudent.setId(new Integer(studentMap.get("id")));
 		newStudent.setFirstName(studentMap.get("firstName"));
 		newStudent.setMiddleName(studentMap.get("middleName"));
 		newStudent.setLastName(studentMap.get("lastName"));
@@ -111,7 +110,7 @@ public class StudentController {
 		newStudent.setSchoolYear(new Integer(studentMap.get("schoolYear")));
 		newStudent.setGradeLevel(new Integer(studentMap.get("gradeLevel")));
 		try {
-			newStudent.setEntryDate((java.sql.Date)sdf.parse(studentMap.get("entryDate")));
+			newStudent.setEntryDate(new java.sql.Date (sdf.parse(studentMap.get("entryDate")).getTime()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

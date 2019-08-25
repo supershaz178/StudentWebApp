@@ -8,21 +8,7 @@
   		<script src="./resouces/WEB_INF/jsp/index.js" type="text/javascript"/>
 	</head> 
 	<body>
-	<header><h1>Students Table</h1></header>
-		<script>
-		$(document).ready(function () {
-		    $.getJSON("/",
-		    function (json) {
-		        var tr;
-		        for (var i = 0; i < json.length; i++) {
-		            tr = $('<tr/>');
-		            tr.append("<td>" + json[i].User_Name + "</td>");
-		            tr.append("<td>" + json[i].score + "</td>");
-		            tr.append("<td>" + json[i].team + "</td>");
-		            $('table').append(tr);
-		        }
-		    });
-		});
-		</script>
+	<h1>Students Table</h1>
+		<element onload="createStudentTable">
 	</body>
 </html>

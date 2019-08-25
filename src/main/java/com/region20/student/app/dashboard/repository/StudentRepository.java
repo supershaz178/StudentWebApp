@@ -18,7 +18,9 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
 	
 	public List<Student> findByCampus(List<Integer> campuses); 
 	
-	public List<Student> findByExternalStudentId(List<Integer> studentIds); 
+	public List<Student> findByExternalStudentId(List<Integer> studentIds);
+	
+	public Student findByExternalStudentId(Integer studentId);
 	
 	public List<Student> findByEntryDate(List<Date> entryDates); 
 	
